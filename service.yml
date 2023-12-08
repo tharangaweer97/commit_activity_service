@@ -1,0 +1,14 @@
+#Kubernetes API version
+apiVersion: v1
+kind: Service
+metadata:
+  name: commit-activity-service
+#state of the Service
+spec:
+  #Service will route traffic to Pods that have a label with app: commit-activity-service
+  selector:
+    app: commit-activity-service
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
