@@ -1,0 +1,14 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /api/v1/commit-activity-service
+
+github:
+  commit-detail-url: https://api.github.com/repos/apple/swift/contributors
+
+spring:
+  data:
+    mongodb:
+      uri: mongodb+srv://tharanga97:2224198Kal@cluster0.9sccwas.mongodb.net/developer_tracker
+
+#

@@ -28,10 +28,23 @@ spec:
           ports:
             - containerPort: 8080
           #Resource requests and limits for the container
+          readinessProbe:
+            #Resource requests and limits for the container
+            httpGet:
+              port: 8080
+              path: /api/v1/commit-activity-service/actuator/health
+            initialDelaySeconds: 40
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              port: 8080
+              path: /api/v1/commit-activity-service/actuator/health
+            initialDelaySeconds: 40
+            periodSeconds: 10
           resources:
             requests:
-              cpu: "50m"
-              memory: "80Mi"
+              cpu: "300m"
+              memory: "400Mi"
             limits:
               cpu: "500m"
               memory: "512Mi"

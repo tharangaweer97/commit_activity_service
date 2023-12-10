@@ -1,0 +1,55 @@
+package com.developertracker.commitactivity.service;
+
+
+import com.developertracker.commitactivity.dto.GithubCommitDto;
+import com.developertracker.commitactivity.model.GithubCommit;
+import com.developertracker.commitactivity.repository.GithubCommitRepository;
+import com.developertracker.commitactivity.service.external.GithubExternalClient;
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
+
+@Service
+@AllArgsConstructor
+public class GithubCommitServiceImpl implements GithubCommitService {
+
+    private final GithubExternalClient githubExternalClient;
+    private final GithubCommitRepository githubCommitRepository;
+
+    @Override
+    public List<GithubCommit> getGithubCommit() {
+        List<GithubCommit> githubCommits = new ArrayList<>();
+
+        List<GithubCommitDto> githubCommitDtoList = this.githubExternalClient.getCommitDetails();
+        githubCommitDtoList.forEach(githubCommitDto -> {
+            GithubCommit githubCommit = this.generateGitHubCommitObject(githubCommitDto);
+            githubCommits.add(githubCommit);
+        });
+
+        this.githubCommitRepository.saveAll(githubCommits);
+
+        return githubCommits;
+
+
+    }
+
+    @Override
+    public List<GithubCommit> getAllCommits() {
+        return this.githubCommitRepository.findAll();
+    }
+
+    private GithubCommit generateGitHubCommitObject(GithubCommitDto githubCommitDto) {
+        return GithubCommit.builder()
+                .gitHubId(githubCommitDto.getId())
+                .login(githubCommitDto.getLogin())
+                .contributions(githubCommitDto.getContributions())
+                .type(githubCommitDto.getType())
+                .siteAdmin(githubCommitDto.isSiteAdmin())
+                .reposUrl(githubCommitDto.getReposUrl())
+                .nodeId(githubCommitDto.getNodeId())
+                .build();
+    }
+
+}
