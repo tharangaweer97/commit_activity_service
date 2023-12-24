@@ -1,6 +1,7 @@
 package com.developertracker.commitactivity.service;
 
 
+import com.developertracker.commitactivity.dto.CommitDetailsDto;
 import com.developertracker.commitactivity.dto.GithubCommitDto;
 import com.developertracker.commitactivity.model.GithubCommit;
 import com.developertracker.commitactivity.repository.GithubCommitRepository;
@@ -37,19 +38,27 @@ public class GithubCommitServiceImpl implements GithubCommitService {
 
     @Override
     public List<GithubCommit> getAllCommits() {
+
         return this.githubCommitRepository.findAll();
     }
 
-    private GithubCommit generateGitHubCommitObject(GithubCommitDto githubCommitDto) {
+    @Override
+    public CommitDetailsDto getAllCommitsByAuthorName(String authorName) {
+        List<GithubCommit> gitHubCommits = this.githubCommitRepository.findAllByAuthorName(authorName.trim());
+        return CommitDetailsDto.builder().commitCount(gitHubCommits.size()).userCommitList(gitHubCommits).build();
+    }
+
+    private GithubCommit generateGitHubCommitObject(GithubCommitDto gitHubCommitDto) {
         return GithubCommit.builder()
-                .gitHubId(githubCommitDto.getId())
-                .login(githubCommitDto.getLogin())
-                .contributions(githubCommitDto.getContributions())
-                .type(githubCommitDto.getType())
-                .siteAdmin(githubCommitDto.isSiteAdmin())
-                .reposUrl(githubCommitDto.getReposUrl())
-                .nodeId(githubCommitDto.getNodeId())
+                .authorName(gitHubCommitDto.getCommitDto().getAuthorDto().getName())
+                .commitMessage(gitHubCommitDto.getCommitDto().getMessage())
+                .email(gitHubCommitDto.getCommitDto().getAuthorDto().getEmail())
+                .date(gitHubCommitDto.getCommitDto().getAuthorDto().getDate())
                 .build();
     }
 
 }
+
+
+
+
