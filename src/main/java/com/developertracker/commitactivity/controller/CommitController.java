@@ -19,7 +19,7 @@ import java.util.List;
 public class CommitController {
     private GithubCommitService githubCommitService;
 
-    @GetMapping("/commits")
+    @GetMapping("/commit")
     public ResponseEntity<List<GithubCommit>> getGithubCommit() {
         return ResponseEntity.ok(this.githubCommitService.getGithubCommit());
     }
