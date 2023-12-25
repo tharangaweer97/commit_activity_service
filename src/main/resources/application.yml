@@ -4,7 +4,7 @@ server:
     context-path: /api/v1/commit-activity-service
 
 github:
-  commit-detail-url: https://api.github.com/repos/apple/swift/contributors
+  commit-detail-url: https://api.github.com/repos/apple/swift/commits
 
 spring:
   data:
